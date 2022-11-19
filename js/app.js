@@ -56,6 +56,11 @@ function createCookie(newCookie) {
     newCookie.value
     //toUTCString converti l'objet date en string
   )};expires=${newCookie.expires.toUTCString()}`;
+
+  // Affiche dynamiquement le cookie lors de la création
+  if (cookiesList.children.length) {
+    displayCookies()
+  }
 }
 
 // Vérifie si le cookie existe déjà
@@ -100,6 +105,11 @@ displayCookieBtn.addEventListener("click", displayCookies);
 let lock = false;
 
 function displayCookies() {
+  // Empêche la répétition du même affichage lorsqu'on click sur le bouton "Afficher"
+if (cookiesList.children.length) {
+  cookiesList.textContent = "";
+}
+
   // Enlève les espaces avec le regex de replace(), crée un tableau et enlève-les ";" avec split()
   // et inverse l'ordre avec reverse()
   const cookies = document.cookie.replace(/\s/g, "").split(";").reverse();
@@ -107,7 +117,7 @@ function displayCookies() {
   // Si cookies est false
   if (!cookies[0]) {
     if (lock) return;
-    
+
     lock = true;
     infoTxt.textContent = "Pas de cookies à afficher, créez-en un !";
 
@@ -121,20 +131,35 @@ function displayCookies() {
   createElements(cookies);
 }
 
+// Affichage de la liste de cookies
+function createElements(cookies) {
+  cookies.forEach((cookie) => {
+    const formatCookie = cookie.split("=");
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+    const listItem = document.createElement("li");
+    const name = decodeURIComponent(formatCookie[0]);
+    listItem.innerHTML =  `
+        <p>
+            <span>Nom</span> : ${name}
+       </p>
+       <p>
+            <span>Valeur</span> : ${decodeURIComponent(formatCookie[1])}
+       </p>
+       <button>X</button>
+    `;
+    
+    // Toast qui indique que l'on a supprimé un cookie
+    listItem.querySelector("button").addEventListener("click", e => {
+      createToast({name: name, state: "supprimé", color: "crimson"})
+      // Détruit le cookie : 
+      //  1) on prend son nom est on ne met rien
+      //  2) on met la valeur de new Date à zéro (qui correspond au 01/01/1970)
+      document.cookie = `${formatCookie[0]}=; expires=${new Date(0)}`
+      e.target.parentElement.remove()
+    })
+    cookiesList.appendChild(listItem);
+  });
+}
 
 
 
