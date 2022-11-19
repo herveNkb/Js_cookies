@@ -34,7 +34,7 @@ function handleForm(event) {
   });
   // Date d'expiration du cookie (ici, c'est pour une 7jours)
   newCookie.expires = new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000);
-  
+
   createCookie(newCookie);
   // Vide le champ de l'input une fois le cookie créé
   cookieForm.reset();
@@ -62,10 +62,10 @@ function createCookie(newCookie) {
 function doesCookieExist(name) {
   // Enlève les espaces et le séparateur (;)
   const cookies = document.cookie.replace(/\s/g, "").split(";");
-  
+
   // Met le nom de chaque cookie dans un tableau à multiple dimension car ".split" garde tout ce qui a avant le =
   const onlyCookiesName = cookies.map((cookie) => cookie.split("=")[0]);
-  
+
   // Boucle dans le tableau onlyCookieName pour voir si le nom du cookie qui est en train
   // d'être créé n'existe pas déjà
   return onlyCookiesName.find((cookie) => cookie === encodeURIComponent(name));
@@ -88,3 +88,78 @@ function createToast({ name, state, color }) {
     toastInfo.remove();
   }, 2500);
 }
+
+// Affichage des cookies
+const cookiesList = document.querySelector(".cookies-list");
+const displayCookieBtn = document.querySelector(".display-cookie-btn");
+const infoTxt = document.querySelector(".info-txt");
+
+displayCookieBtn.addEventListener("click", displayCookies);
+
+// Verrouille l'affichage du message d'erreur pour éviter le spam du click
+let lock = false;
+
+function displayCookies() {
+  // Enlève les espaces avec le regex de replace(), crée un tableau et enlève-les ";" avec split()
+  // et inverse l'ordre avec reverse()
+  const cookies = document.cookie.replace(/\s/g, "").split(";").reverse();
+
+  // Si cookies est false
+  if (!cookies[0]) {
+    if (lock) return;
+    
+    lock = true;
+    infoTxt.textContent = "Pas de cookies à afficher, créez-en un !";
+
+    setTimeout(() => {
+      infoTxt.textContent = "";
+      lock = false;
+    }, 2000);
+    return;
+  }
+  // Si cookies est true
+  createElements(cookies);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
