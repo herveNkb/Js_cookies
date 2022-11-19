@@ -1,9 +1,6 @@
 # Coder un créateur de Cookies 🍪
 
-  
 Comment les créer, les modifier, la date d'expiration, etc ...
-Le but de ce projet est de créer un générateur de Cookies afin qu'ils n'aient plus de mystère pour vous !
-
 
 ### Fonctionnalités JavaScript à coder pour ce projet
 
